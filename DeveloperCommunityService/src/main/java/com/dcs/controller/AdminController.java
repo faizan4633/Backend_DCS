@@ -144,11 +144,12 @@ public class AdminController {
 		return new ResponseEntity<List<PostDTO>>(response, HttpStatus.OK);
 	}
  
-	@GetMapping("/allPosts")
-	public List<PostDTO> readAllPosts() {
-		return postService.viewPost();
-	}
- 
+    @GetMapping("/allposts")
+    public ResponseEntity<Page<PostDTO>> viewPosts(Pageable pageable) {
+        Page<PostDTO> postPage = postService.viewPost(pageable);
+        return new ResponseEntity<>(postPage, HttpStatus.OK);
+    }
+
 	@PostMapping(path = "addComment", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CommentDTO> addComment(@Valid @RequestBody CommentDTO response)
 			throws DeveloperCommunitySystemException {
@@ -207,10 +208,11 @@ public class AdminController {
 	@Autowired
 	IVoteService voteService;
 	@PostMapping(path="add",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<VoteDTO> saveVote(@Valid @RequestBody VoteDTO vote) throws DeveloperCommunitySystemException{
-		VoteDTO newVote=voteService.addVote(vote);
+	public ResponseEntity<VoteDTO> saveVote(@RequestBody VoteDTO vote, Integer userId) {
+		VoteDTO newVote=voteService.addVote(vote, userId);
 		return new ResponseEntity<VoteDTO>(newVote,HttpStatus.OK);
 	}
+	
 	@GetMapping("all")
 	public ResponseEntity<Page<VoteDTO>> getAllVotes(@Valid Pageable pageable) {
 	    Page<VoteDTO> entities = voteService.getAllVotes(pageable);
