@@ -22,13 +22,38 @@ public class Vote {
 	@Column(name = "voteId")
 	private Integer voteId;
 	
+	
+	private Integer userId1;
+	
+
+	public Integer getUserId1() {
+		return userId1;
+	}
+
+	public void setUserId1(Integer userId1) {
+		this.userId1 = userId1;
+	}
+
 	@Enumerated(EnumType.STRING)
 	private VoteType voteType;
 	
-	@OneToOne
-	@JoinColumn(name = "userId", referencedColumnName = "userId")
-	private Developer developerWhoVoted;
+
 	
+	@Column(name = "comment_id")
+    private Integer commentId;
+	
+	public Integer getCommentId() {
+		return commentId;
+	}
+
+	public void setCommentId(Integer commentId) {
+		this.commentId = commentId;
+	}
+
+//	@OneToOne
+//	@JoinColumn(name = "userId", referencedColumnName = "userId")
+//	private Developer developerWhoVoted;
+//	
 	@ManyToOne
 	@JoinColumn(name = "responseId")
 	private Response response;
@@ -49,13 +74,13 @@ public class Vote {
 		this.voteType = voteType;
 	}
 
-	public Developer getDeveloperWhoVoted() {
-		return developerWhoVoted;
-	}
-
-	public void setDeveloperWhoVoted(Developer developerWhoVoted) {
-		this.developerWhoVoted = developerWhoVoted;
-	}
+//	public Developer getDeveloperWhoVoted() {
+//		return developerWhoVoted;
+//	}
+//
+//	public void setDeveloperWhoVoted(Developer developerWhoVoted) {
+//		this.developerWhoVoted = developerWhoVoted;
+//	}
 
 	public Response getResponse() {
 		return response;
@@ -69,7 +94,7 @@ public class Vote {
 		super();
 		this.voteId = voteId;
 		this.voteType = voteType;
-		this.developerWhoVoted = developerWhoVoted;
+		//this.developerWhoVoted = developerWhoVoted;
 		this.response = response;
 	}
 
@@ -80,8 +105,9 @@ public class Vote {
 
 	@Override
 	public String toString() {
-		return "Vote [voteId=" + voteId + ", voteType=" + voteType + ", developerWhoVoted=" + developerWhoVoted
-				+ ", response=" + response + "]";
+		return "Vote [voteId=" + voteId + ", userId1=" + userId1 + ", voteType=" + voteType + ", commentId=" + commentId
+				+ " response=" + response + "]";
 	}
 
+	
 }

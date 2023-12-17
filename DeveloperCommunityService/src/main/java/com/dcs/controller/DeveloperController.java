@@ -75,12 +75,7 @@ public class DeveloperController {
 		return ResponseEntity.ok(developerService.removeDeveloper(userId));
 	}
 	
-	@GetMapping(path = "get/{userId}")
-	public ResponseEntity<DeveloperDTO> getDevelopers(@PathVariable("userId") Integer userId) throws DeveloperCommunitySystemException{
-		DeveloperDTO developer1 = developerService.getDeveloperById(userId);
-		return new ResponseEntity<DeveloperDTO>(developer1, HttpStatus.OK);
-	}
-	
+
 
 	
 	@GetMapping("/getByStatus/{status}")
@@ -96,7 +91,7 @@ public class DeveloperController {
 
 	}
 	
-	@GetMapping("/getPostByUserId/{userId}")
+	@GetMapping("/getAllPost/{userId}")
 	public ResponseEntity<Page<PostDTO>> getAllPostsByDeveloper(@PathVariable("userId") Integer userId, Pageable pageable) throws DeveloperCommunitySystemException{
 		Page<PostDTO> developerPage = developerService.getAllPostsByDeveloper(userId, pageable);
 		return new ResponseEntity<>(developerPage, HttpStatus.OK);

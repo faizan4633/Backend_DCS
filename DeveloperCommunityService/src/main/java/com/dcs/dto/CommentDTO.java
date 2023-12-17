@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 public class CommentDTO {
 	private Integer commentId;
 	@Size(min = 10, max = 200, message = "Text should not be more than 200 characthers and less than 10 characters")
-	
 	private String text;
 	
 	private DeveloperDTO createdBy;

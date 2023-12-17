@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import com.dcs.dto.PostDTO;
 import com.dcs.entity.Post;
 import com.dcs.exception.DeveloperCommunitySystemException;
 import com.dcs.service.IPostService;
+import com.dcs.service.PostServiceImpl;
 
 
 @RestController
@@ -79,9 +81,14 @@ public class PostController {
 		List<PostDTO> response = postService.findByTopic(topic);
 		return new ResponseEntity<List<PostDTO>>(response, HttpStatus.OK);
 	}
-	@GetMapping("allPosts")
-	public List<Post> readAllPosts(){
-		return postDao.findAll();
-		//return postService.viewPost();
-	}
+	
+    @GetMapping("/allposts")
+    public ResponseEntity<Page<PostDTO>> viewPosts(Pageable pageable) {
+        Page<PostDTO> postPage = postService.viewPost(pageable);
+        return new ResponseEntity<>(postPage, HttpStatus.OK);
+    }
+
+	
+		
+	
 }

@@ -57,15 +57,16 @@ public class DeveloperServiceImpl implements IDeveloperService {
 
 	@Override
 	public List<DeveloperDTO> getDeveloperByReputation(Integer reputation) throws DeveloperCommunitySystemException {
-		List<Developer> entity4 = developerDao.findByReputation(reputation);
-		if(!(developerDao.existsById(reputation))||entity4 == null)
-		{
-			throw new DeveloperCommunitySystemException("Please enter correct reputation",HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		List<DeveloperDTO> developerDTOs = entity4.stream().map(entity -> modelMapper.map(entity, DeveloperDTO.class))
-				.collect(Collectors.toList());
-		return developerDTOs;
+	    List<Developer> entity4 = developerDao.findByReputation(reputation);
+	    if(entity4 == null || entity4.isEmpty()) {
+	        throw new DeveloperCommunitySystemException("No developers found with the given reputation", HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
+	    List<DeveloperDTO> developerDTOs = entity4.stream()
+	            .map(entity -> modelMapper.map(entity, DeveloperDTO.class))
+	            .collect(Collectors.toList());
+	    return developerDTOs;
 	}
+
 	
     
 	@Override
@@ -96,7 +97,6 @@ public class DeveloperServiceImpl implements IDeveloperService {
 	}
 	
 	
-	
 
 	@Override
 	public Page<DeveloperDTO> getDevelopersByStatus(String status, Pageable pageable) {
@@ -107,13 +107,6 @@ public class DeveloperServiceImpl implements IDeveloperService {
 
 	}
 
-//	@Override
-//	public DeveloperDTO updateDeveloper(DeveloperDTO developer) {
-//		Developer entity1 = modelMapper.map(developer, Developer.class);
-//		entity1 = developerDao.save(entity1);
-//		DeveloperDTO entity = modelMapper.map(entity1, DeveloperDTO.class);
-//		return entity;
-//	}
 	@Override
 	public DeveloperDTO updateDeveloper(Integer userId,DeveloperDTO developer) throws Exception {
 		Optional<Developer> dev=developerDao.findById(userId);

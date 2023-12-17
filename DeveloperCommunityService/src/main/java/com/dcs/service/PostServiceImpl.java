@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -58,23 +60,20 @@ public class PostServiceImpl implements IPostService {
 
 	@Override
 	public PostDTO getPostById(Integer postId) throws DeveloperCommunitySystemException {
-//		Post entity = postDao.findById(postId).orElse(null);
-//		
-//	    if (entity != null) {
-//	        
-//	        entity.setNoOfViews(entity.getNoOfViews() + 1);
-//
-//	        
-//	        entity = postDao.save(entity);
-//	    }
-//
-//		PostDTO entity1 = modelMapper.map(entity, PostDTO.class);
-//
-//		return entity1;
-		Post entity=postDao.findById(postId).orElseThrow(
-						()-> new DeveloperCommunitySystemException("PostId Not Found"));
-				PostDTO entity1=modelMapper.map(entity,PostDTO.class);
-				return entity1;
+		Post entity = postDao.findById(postId).orElse(null);
+		
+	    if (entity != null) {
+	        
+	        entity.setNoOfViews(entity.getNoOfViews() + 1);
+
+	        
+	        entity = postDao.save(entity);
+	    }
+
+		PostDTO entity1 = modelMapper.map(entity, PostDTO.class);
+
+		return entity1;
+		
 
 	}
 
@@ -91,26 +90,23 @@ public class PostServiceImpl implements IPostService {
 
 	@Override
 	public List<PostDTO> findByTopic(String topic) {
-		// Pageable pageable = PageRequest.of(page, pageSize);
-		List<Post> post = postDao.findByTopic(topic);
+				List<Post> post = postDao.findByTopic(topic);
 
 		return post.stream().map(post1 -> modelMapper.map(post1, PostDTO.class)).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<PostDTO> viewPost() {
-		List<PostDTO> postDTOs = new ArrayList<PostDTO>();
-		List<Post> post = postDao.findAll();
-		for (Post post1 : post) {
-			PostDTO postDTO = new PostDTO();
-			postDTO.setNoOfViews(post1.getNoOfViews());
-			postDTO.setPostDateTime(post1.getPostDateTime());
-			postDTO.setDeveloper(modelMapper.map(post1.getDeveloper(), DeveloperDTO.class));
-			postDTO.setPostId(post1.getPostId());
-			postDTO.setQuery(post1.getQuery());
-			postDTO.setTopic(post1.getTopic());
-			postDTOs.add(postDTO);
-		}
-		return postDTOs;
+	public Page<PostDTO> viewPost(Pageable pageable) {
+	    Page<Post> postPage = postDao.findAll(pageable);
+	    return postPage.map(post1 -> {
+	        PostDTO postDTO = new PostDTO();
+	        postDTO.setNoOfViews(post1.getNoOfViews());
+	        postDTO.setPostDateTime(post1.getPostDateTime());
+	        postDTO.setDeveloper(modelMapper.map(post1.getDeveloper(), DeveloperDTO.class));
+	        postDTO.setPostId(post1.getPostId());
+	        postDTO.setQuery(post1.getQuery());
+	        postDTO.setTopic(post1.getTopic());
+	        return postDTO;
+	    });
 	}
 }

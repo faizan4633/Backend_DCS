@@ -16,12 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.dcs.dao.CommentDao;
+import com.dcs.dao.VoteDao;
 import com.dcs.dto.CommentDTO;
 import com.dcs.dto.DeveloperDTO;
 import com.dcs.dto.PostDTO;
 import com.dcs.entity.Comment;
 import com.dcs.entity.Developer;
 import com.dcs.entity.Post;
+import com.dcs.entity.Vote;
 import com.dcs.exception.DeveloperCommunitySystemException;
 
 //import net.bytebuddy.asm.Advice.OffsetMapping.Sort;
@@ -31,8 +33,10 @@ public class CommentServiceImpl implements ICommentService {
 
 	@Autowired
 	private CommentDao commentDao;
+	
 	@Autowired
 	private ModelMapper modelMapper;
+	
 
 	@Override
 	public CommentDTO addComment(CommentDTO comment) {
@@ -102,7 +106,7 @@ public class CommentServiceImpl implements ICommentService {
 	private CommentDTO convertToDTO(Comment comment) {
         return modelMapper.map(comment, CommentDTO.class);
         
-    }
+    } 
 	
 	@Override
 	public Page<CommentDTO> getCommentsByResponseId(Integer resId, Pageable pageable ) {
@@ -119,20 +123,22 @@ public class CommentServiceImpl implements ICommentService {
 	    
 	    return commentPage.map(this::convertToDTO);
 	}
-	
-
-
-	
-
-
-	
-
 
 	@Override
 	public Integer getNoOfVotesOnCommentByVoteType(String voteType, Integer commentId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+
+
+	
+
+
+	
+
+
+
 
 
 
